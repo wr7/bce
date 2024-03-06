@@ -27,13 +27,13 @@ To read from `stdin` or output to `stdout`, `-` can be used as an input or outpu
 ### Differences from `xxd -i`
 `bce` has different output compared to `xxd -i`.
 Say the user runs `bce foo.bin foo.h`. 
-If foo.bin contains only two null bytes, bce will only output:
-```
+If `foo.bin` contains two null bytes, the generated `foo.h` will contain:
+```c
 {0,0,};
 ```
 
-Unlike `xxd -i`, the user must create the variable storing the data themselves,
-and they must find the length themselves. 
+Unlike `xxd -i`, the user must create a variable to store the data themselves,
+and they must find the length of the data themselves. 
 
 This can be done with the following C code:
 ```c
