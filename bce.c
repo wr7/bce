@@ -1,5 +1,13 @@
 /*
-   bce v1.0
+   bce v1.1
+
+   https://github.com/wr7/bce
+
+   bce is software for converting binary files to C headers. This is useful for 
+   embedding binary files into your C project.
+
+   This software is licensed under the MIT license.
+
    Copyright © 2024 wr7
 
    Permission is hereby granted, free of charge, to any person obtaining a copy 
