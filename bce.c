@@ -1,5 +1,5 @@
 /*
-   bce v1.1
+   bce v1.2
 
    https://github.com/wr7/bce
 
@@ -38,31 +38,31 @@
 #include <errno.h>
 
 static void print_usage(void) {
-    fprintf(stderr, "\
-Converts a file to a C byte array. \n\
-This is a non drop-in replacement for `xxd -i`.\n\
-\n\
-Usage\n\
-bce <input_file> <output_file>\n\
-`-` can be used in place of <input_file> or <output_file>\n\
-to read from stdin or to output to stdout\n\
-\n\
-Ouput\n\
-bce has very different output compared to `xxd -i`.\n\
-Say the user runs `bce foo.bin foo.h`. \n\
-If foo.bin contains only two null bytes, bce will only output:\n\
-  {0,0,};\n\
-\n\
-Unlike xxd, the user must create the variable storing the data themselves,\n\
-and they must find the length themselves. \n\
-\n\
-This can be done with the following C code:\n\
-\n\
-const char FOO[] =\n\
-#include \"foo.h\"\n\
-\n\
-const size_t FOO_LEN = sizeof(FOO)/sizeof(FOO[0]);\n\
-");
+    fprintf(stderr,
+        "Converts a file to a C byte array. \n"
+        "This is a non drop-in replacement for `xxd -i`.\n"
+        "\n"
+        "Usage\n"
+        "bce <input_file> <output_file>\n"
+        "`-` can be used in place of <input_file> or <output_file>\n"
+        "to read from stdin or to output to stdout\n"
+        "\n"
+        "Ouput\n"
+        "bce has very different output compared to `xxd -i`.\n"
+        "Say the user runs `bce foo.bin foo.h`. \n"
+        "If foo.bin contains only two null bytes, bce will only output:\n"
+        "  {0,0,};\n"
+        "\n"
+        "Unlike xxd, the user must create the variable storing the data themselves,\n"
+        "and they must find the length themselves. \n"
+        "\n"
+        "This can be done with the following C code:\n"
+        "\n"
+        "const char FOO[] =\n"
+        "#include \"foo.h\"\n"
+        "\n"
+        "const size_t FOO_LEN = sizeof(FOO)/sizeof(FOO[0]);\n"
+    );
 }
 
 static void check_write_error() {
@@ -82,7 +82,7 @@ int main(int argc, char **args) {
     }
 
     if(argc != 3) {
-        fprintf(stderr, "bce: Invalid usage, see `bce --help` for more information.");
+        fprintf(stderr, "bce: Invalid usage, see `bce --help` for more information.\n");
         return 1;
     }
 
@@ -92,7 +92,7 @@ int main(int argc, char **args) {
     if(strcmp(input_file_name, "-") == 0) {
         input_file = stdin;
     } else {
-        input_file = fopen(input_file_name, "r");
+        input_file = fopen(input_file_name, "rb");
     }
     if(input_file == NULL) {
         perror("bce: Failed to open input file");
@@ -123,6 +123,7 @@ int main(int argc, char **args) {
 
     if(errno != 0) {
         perror("bce: Failed to read from input file");
+        exit(errno);
     }
 
     fprintf(output_file, "};");
