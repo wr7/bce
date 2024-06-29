@@ -1,5 +1,63 @@
+This repo contains [`libbce`](#libbce) and [`bce`](#bce). Both of these are independent programs for embedding binary files directly into C programs.
+
+# libbce
+libbce (LIB Binary C Embed) is a single-header library for generating C 
+headers/sources with embedded constants/variables. It's intended for performing 
+compile-time computations and then saving them in headers/sources. An example 
+of this may be decoding images and then embedding them into a program.
+
+To use libbce, create a source file with the following contents:
+```c
+#define  LIBBCE_IMPL
+#include "libbce.h"
+```
+
+To generate a simple 3-variable file with libbce, you can just do:
+```c
+#include "libbce.h"
+
+#define ARRAY_LENGTH(arr) (sizeof(arr)/sizeof((arr)[0]))
+
+int main(void) {
+	// variables to write
+	const char *hello_world = "hello world!";
+	const unsigned char nums[] = {8, 64, 11, 92, 129, 2, 2, 55};
+	const int number = 69;
+
+	bce_file *file = bce_create("output.c");
+
+	bce_printf(file, "const char *hello_world=");
+	bce_print_string(file, hello_world, strlen(hello_world));
+	bce_printf(file, ";\n");
+
+	bce_printf(file, "const char *nums=");
+	bce_print_string(file, (const char*) &nums[0], ARRAY_LENGTH(nums));
+	bce_printf(file, ";\n");
+
+	bce_printf(file, "const int number=%d;\n", number);
+
+	bce_close(file);
+}
+```
+
+This will output the following to `output_file.c`:
+```c
+const char *hello_world="hello world!";
+const unsigned char nums[]="\b@\v\\\201\2\0027";
+const int number = 69;
+```
+
+This example does not do any error handling, but most falliable libbce 
+functions will return `false` and set `errno` upon error.
+
+Additionally, If all of the file-writing logic is put into a `bool`-returning 
+function, the `bce_printfh` macro can be used which will automatically pass on 
+any errors returned by `bce_printf`.
+
+
+# bce
 bce (Binary C Embed) is a simple program for converting a file to a C byte array. This can be used with build systems like Meson or Make to embed binary files directly into a C program.
-`bce` is meant to be a lightweight replacement for `vim`'s `xxd -i` command, but `bce`'s output is simpler/different, so it is **not** a drop-in replacement for `xxd -i`.
+`bce` is meant to be a lightweight replacement for `vim`'s `xxd -i` command, but `bce`'s output is simpler.
 ### Installing
 `bce` was designed so that its `bce.c` file can be symlinked or copied directly into your project. This way, your project can architecture-independently ship `bce` around with it and not require it as an external dependency.
 To do this with Meson, see the [Using with Meson](#using-with-meson) section.
