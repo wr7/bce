@@ -1,27 +1,24 @@
 /*
-   bce v1.2
+   bce v1.3
 
    https://github.com/wr7/bce
 
    bce is software for converting binary files to C headers. This is useful for 
    embedding binary files into your C project.
 
-   This software is licensed under the MIT license.
+   This software is licensed under the MIT No Attribution License (SPDX MIT-0).
 
    Copyright © 2024 wr7
 
    Permission is hereby granted, free of charge, to any person obtaining a copy 
-   of this software and associated documentation files (the “Software”), to 
+   of this software and associated documentation files (the "Software"), to 
    deal in the Software without restriction, including without limitation the 
    rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
    sell copies of the Software, and to permit persons to whom the Software is 
-   furnished to do so, subject to the following conditions:
+   furnished to do so.
 
-   The above copyright notice and this permission notice shall be included in 
-   all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
@@ -65,7 +62,7 @@ static void print_usage(void) {
     );
 }
 
-static void check_write_error() {
+static void check_write_error(void) {
     if(errno != 0) {
         perror("bce: failed to write to output file");
         exit(errno);
